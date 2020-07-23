@@ -40,6 +40,7 @@ import {
   getSpanDuration,
   generateCSSWidth,
 } from './utils';
+import {SpanBarRectangle} from './styles';
 import SpanDetail from './spanDetail';
 
 type Props = {
@@ -523,13 +524,7 @@ const getHatchPattern = ({spanBarHatch}) => {
   return null;
 };
 
-const ComparisonSpanBarRectangle = styled('div')`
-  position: relative;
-  height: 100%;
-  min-width: 1px;
-  user-select: none;
-  transition: border-color 0.15s ease-in-out;
-  border-right: 1px solid rgba(0, 0, 0, 0);
+const ComparisonSpanBarRectangle = styled(SpanBarRectangle)`
   ${getHatchPattern};
 `;
 
