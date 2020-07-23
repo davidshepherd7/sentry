@@ -78,7 +78,7 @@ const MatchedSpanDetailsContent = (props: {
   ]);
 
   return (
-    <MatchedSpanDetails>
+    <div>
       <Row
         baselineTitle={t('Baseline Span ID')}
         regressiveTitle={t('Regressive Span ID')}
@@ -208,11 +208,9 @@ const MatchedSpanDetailsContent = (props: {
           }}
         />
       ))}
-    </MatchedSpanDetails>
+    </div>
   );
 };
-
-const MatchedSpanDetails = styled('div')``;
 
 const RowSplitter = styled('div')`
   display: flex;
