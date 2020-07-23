@@ -1,7 +1,7 @@
 import React from 'react';
 import map from 'lodash/map';
-import {t} from 'app/locale';
 
+import {t} from 'app/locale';
 import getDynamicText from 'app/utils/getDynamicText';
 import DateTime from 'app/components/dateTime';
 import {SpanType, rawSpanKeys} from 'app/components/events/interfaces/spans/types';
