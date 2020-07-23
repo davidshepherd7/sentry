@@ -2,10 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 import space from 'app/styles/space';
-import {
-  SpanDetailContainer,
-  Row,
-} from 'app/components/events/interfaces/spans/spanDetail';
+import {SpanDetailContainer} from 'app/components/events/interfaces/spans/spanDetail';
 import {SpanType} from 'app/components/events/interfaces/spans/types';
 
 import {DiffSpanType} from './utils';
@@ -94,16 +91,6 @@ const RowSplitter = styled('div')`
   }
 `;
 
-const Foo = (props: {children: JSX.Element}) => {
-  return (
-    <TableContainer>
-      <table className="table key-value">
-        <tbody>{props.children}</tbody>
-      </table>
-    </TableContainer>
-  );
-};
-
 const RowContainer = styled('div')`
   width: 50%;
   min-width: 50%;
@@ -135,16 +122,6 @@ const RowCell = ({title, children}: {title: string; children: React.ReactNode}) 
     </RowContainer>
   );
 };
-
-const TableContainer = styled('div')`
-  width: 50%;
-  min-width: 50%;
-  max-width: 50%;
-  flex-basis: 50%;
-
-  padding-left: ${space(2)};
-  padding-right: ${space(2)};
-`;
 
 // const MatchedSpanDetails = styled('div')`
 //   display: flex;
