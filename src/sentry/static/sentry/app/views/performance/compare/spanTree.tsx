@@ -41,7 +41,7 @@ class SpanTree extends React.Component<Props> {
     generateBounds,
   }: {
     span: Readonly<DiffSpanType>;
-    childSpans: Readonly<SpanChildrenLookupType>;
+    childSpans: SpanChildrenLookupType;
     spanNumber: number;
     treeDepth: number;
     continuingTreeDepths: Array<TreeDepthType>;
@@ -50,6 +50,13 @@ class SpanTree extends React.Component<Props> {
     generateBounds: (span: DiffSpanType) => SpanGeneratedBoundsType;
   }): RenderedSpanTree {
     const spanChildren: Array<DiffSpanType> = childSpans?.[getSpanID(span)] ?? [];
+
+    // Mark descendents as being rendered. This is to address potential recursion issues due to malformed data.
+    // For example if a span has a span_id that's identical to its parent_span_id.
+    childSpans = {
+      ...childSpans,
+    };
+    delete childSpans[getSpanID(span)];
 
     type AccType = {
       renderedSpanChildren: Array<JSX.Element>;
