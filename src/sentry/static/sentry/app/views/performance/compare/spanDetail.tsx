@@ -79,6 +79,7 @@ const MatchedSpanDetailsContent = (props: {
 
   return (
     <div>
+      <SpanBars />
       <Row
         baselineTitle={t('Baseline Span ID')}
         regressiveTitle={t('Regressive Span ID')}
@@ -220,6 +221,15 @@ const RowSplitter = styled('div')`
     border-left: 1px solid ${p => p.theme.borderDark};
   }
 `;
+
+const SpanBars = () => {
+  return (
+    <RowSplitter>
+      <RowContainer>baseline</RowContainer>
+      <RowContainer>regressive</RowContainer>
+    </RowSplitter>
+  );
+};
 
 const Row = (props: {
   title?: string;
