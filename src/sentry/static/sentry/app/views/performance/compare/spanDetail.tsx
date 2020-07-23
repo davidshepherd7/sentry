@@ -127,11 +127,28 @@ const MatchedSpanDetailsContent = (props: {
             value: (
               <React.Fragment>
                 <DateTime date={regressionSpan.timestamp * 1000} />
-                {` (${baselineSpan.timestamp})`}
+                {` (${regressionSpan.timestamp})`}
               </React.Fragment>
             ),
           })
         }
+      />
+      <Row
+        title="Duration"
+        renderBaselineContent={() => {
+          const startTimestamp: number = baselineSpan.start_timestamp;
+          const endTimestamp: number = baselineSpan.timestamp;
+
+          const duration = (endTimestamp - startTimestamp) * 1000;
+          return `${duration.toFixed(3)}ms`;
+        }}
+        renderRegressiveContent={() => {
+          const startTimestamp: number = regressionSpan.start_timestamp;
+          const endTimestamp: number = regressionSpan.timestamp;
+
+          const duration = (endTimestamp - startTimestamp) * 1000;
+          return `${duration.toFixed(3)}ms`;
+        }}
       />
     </MatchedSpanDetails>
   );
