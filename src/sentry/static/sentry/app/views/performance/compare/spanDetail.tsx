@@ -80,28 +80,28 @@ const MatchedSpanDetailsContent = (props: {
   return (
     <MatchedSpanDetails>
       <Row
-        baselineTitle="Baseline Span ID"
-        regressiveTitle="Regressive Span ID"
+        baselineTitle={t('Baseline Span ID')}
+        regressiveTitle={t('Regressive Span ID')}
         renderBaselineContent={() => baselineSpan.span_id}
         renderRegressiveContent={() => regressionSpan.span_id}
       />
       <Row
-        title="Parent Span ID"
+        title={t('Parent Span ID')}
         renderBaselineContent={() => baselineSpan.parent_span_id || ''}
         renderRegressiveContent={() => regressionSpan.parent_span_id || ''}
       />
       <Row
-        title="Trace ID"
+        title={t('Trace ID')}
         renderBaselineContent={() => baselineSpan.trace_id}
         renderRegressiveContent={() => regressionSpan.trace_id}
       />
       <Row
-        title="Description"
+        title={t('Description')}
         renderBaselineContent={() => baselineSpan.description ?? ''}
         renderRegressiveContent={() => regressionSpan.description ?? ''}
       />
       <Row
-        title="Start Date"
+        title={t('Start Date')}
         renderBaselineContent={() =>
           getDynamicText({
             fixed: 'Mar 16, 2020 9:10:12 AM UTC',
@@ -126,7 +126,7 @@ const MatchedSpanDetailsContent = (props: {
         }
       />
       <Row
-        title="End Date"
+        title={t('End Date')}
         renderBaselineContent={() =>
           getDynamicText({
             fixed: 'Mar 16, 2020 9:10:12 AM UTC',
@@ -151,7 +151,7 @@ const MatchedSpanDetailsContent = (props: {
         }
       />
       <Row
-        title="Duration"
+        title={t('Duration')}
         renderBaselineContent={() => {
           const startTimestamp: number = baselineSpan.start_timestamp;
           const endTimestamp: number = baselineSpan.timestamp;
@@ -168,12 +168,12 @@ const MatchedSpanDetailsContent = (props: {
         }}
       />
       <Row
-        title="Operation"
+        title={t('Operation')}
         renderBaselineContent={() => baselineSpan.op || ''}
         renderRegressiveContent={() => regressionSpan.op || ''}
       />
       <Row
-        title="Same Process as Parent"
+        title={t('Same Process as Parent')}
         renderBaselineContent={() => String(!!baselineSpan.same_process_as_parent)}
         renderRegressiveContent={() => String(!!regressionSpan.same_process_as_parent)}
       />
