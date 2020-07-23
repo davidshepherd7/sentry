@@ -64,49 +64,34 @@ const MatchedSpanDetailsContent = (props: {
   return (
     <MatchedSpanDetails>
       <RowSplitter>
-        <Foo>
-          <Row title="Span ID">{baselineSpan.span_id}</Row>
-        </Foo>
-        <Foo>
-          <Row title="Span ID">{regressionSpan.span_id}</Row>
-        </Foo>
+        <RowCell title="Baseline Span ID">{baselineSpan.span_id}</RowCell>
+        <RowCell title="Regressive Span ID">{regressionSpan.span_id}</RowCell>
       </RowSplitter>
       <RowSplitter>
-        <Foo>
-          <Row title="Parent Span ID">{baselineSpan.parent_span_id || ''}</Row>
-        </Foo>
-        <Foo>
-          <Row title="Parent Span ID">{regressionSpan.parent_span_id || ''}</Row>
-        </Foo>
+        <RowCell title="Parent Span ID">{baselineSpan.parent_span_id || ''}</RowCell>
+        <RowCell title="Parent Span ID">{regressionSpan.parent_span_id || ''}</RowCell>
       </RowSplitter>
       <RowSplitter>
-        <Foo>
-          <Row title="Trace ID">{baselineSpan.trace_id}</Row>
-        </Foo>
-        <Foo>
-          <Row title="Trace ID">{regressionSpan.trace_id}</Row>
-        </Foo>
+        <RowCell title="Trace ID">{baselineSpan.trace_id}</RowCell>
+        <RowCell title="Trace ID">{regressionSpan.trace_id}</RowCell>
       </RowSplitter>
       <RowSplitter>
-        <Foo>
-          <Row title="Description">{baselineSpan.description ?? ''}</Row>
-        </Foo>
-        <Foo>
-          <Row title="Description">{regressionSpan.description ?? ''}</Row>
-        </Foo>
+        <RowCell title="Description">{baselineSpan.description ?? ''}</RowCell>
+        <RowCell title="Description">{regressionSpan.description ?? ''}</RowCell>
       </RowSplitter>
     </MatchedSpanDetails>
   );
 };
 
-const MatchedSpanDetails = styled('div')`
-  padding-top: ${space(2)};
-  padding-bottom: ${space(2)};
-`;
+const MatchedSpanDetails = styled('div')``;
 
 const RowSplitter = styled('div')`
   display: flex;
   flex-direction: row;
+
+  > * + * {
+    border-left: 1px solid ${p => p.theme.borderDark};
+  }
 `;
 
 const Foo = (props: {children: JSX.Element}) => {
@@ -119,13 +104,43 @@ const Foo = (props: {children: JSX.Element}) => {
   );
 };
 
-const TableContainer = styled('div')`
+const RowContainer = styled('div')`
   width: 50%;
   min-width: 50%;
   max-width: 50%;
   flex-basis: 50%;
 
-  outline: 1px solid red;
+  padding-left: ${space(2)};
+  padding-right: ${space(2)};
+`;
+
+const RowTitle = styled('div')`
+  font-size: ${p => p.theme.fontSizeMedium};
+  font-weight: 600;
+`;
+
+const RowCell = ({title, children}: {title: string; children: React.ReactNode}) => {
+  if (!children) {
+    return null;
+  }
+
+  return (
+    <RowContainer>
+      <RowTitle>{title}</RowTitle>
+      <div>
+        <pre className="val">
+          <span className="val-string">{children}</span>
+        </pre>
+      </div>
+    </RowContainer>
+  );
+};
+
+const TableContainer = styled('div')`
+  width: 50%;
+  min-width: 50%;
+  max-width: 50%;
+  flex-basis: 50%;
 
   padding-left: ${space(2)};
   padding-right: ${space(2)};
