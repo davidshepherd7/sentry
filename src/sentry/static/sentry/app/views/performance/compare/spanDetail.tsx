@@ -268,7 +268,7 @@ const RowCell = ({title, children}: {title: string; children: React.ReactNode}) 
     <RowContainer>
       <RowTitle>{title}</RowTitle>
       <div>
-        <pre className="val">
+        <pre className="val" style={{marginBottom: space(1)}}>
           <span className="val-string">{children}</span>
         </pre>
       </div>
