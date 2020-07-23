@@ -3,7 +3,7 @@ import map from 'lodash/map';
 
 import getDynamicText from 'app/utils/getDynamicText';
 import DateTime from 'app/components/dateTime';
-import {SpanType} from 'app/components/events/interfaces/spans/types';
+import {SpanType, rawSpanKeys} from 'app/components/events/interfaces/spans/types';
 import {SpanDetails, Row, Tags} from 'app/components/events/interfaces/spans/spanDetail';
 
 type Props = {
@@ -20,13 +20,17 @@ class SpanDetailContent extends React.Component<Props> {
     const duration = (endTimestamp - startTimestamp) * 1000;
     const durationString = `${duration.toFixed(3)}ms`;
 
+    const unknownKeys = Object.keys(span).filter(key => {
+      return !rawSpanKeys.has(key as any);
+    });
+
     return (
       <SpanDetails>
         <table className="table key-value">
           <tbody>
             <Row title="Span ID">{span.span_id}</Row>
-            <Row title="Trace ID">{span.trace_id}</Row>
             <Row title="Parent Span ID">{span.parent_span_id || ''}</Row>
+            <Row title="Trace ID">{span.trace_id}</Row>
             <Row title="Description">{span?.description ?? ''}</Row>
             <Row title="Start Date">
               {getDynamicText({
@@ -59,6 +63,11 @@ class SpanDetailContent extends React.Component<Props> {
             {map(span?.data ?? {}, (value, key) => (
               <Row title={key} key={key}>
                 {JSON.stringify(value, null, 4) || ''}
+              </Row>
+            ))}
+            {unknownKeys.map(key => (
+              <Row title={key} key={key}>
+                {JSON.stringify(span[key], null, 4) || ''}
               </Row>
             ))}
           </tbody>
