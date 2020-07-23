@@ -8,7 +8,7 @@ import DateTime from 'app/components/dateTime';
 import Pill from 'app/components/pill';
 import Pills from 'app/components/pills';
 import {SpanDetailContainer} from 'app/components/events/interfaces/spans/spanDetail';
-import {SpanType} from 'app/components/events/interfaces/spans/types';
+import {SpanType, rawSpanKeys} from 'app/components/events/interfaces/spans/types';
 
 import {DiffSpanType} from './utils';
 import SpanDetailContent from './spanDetailContent';
@@ -62,6 +62,20 @@ const MatchedSpanDetailsContent = (props: {
   regressionSpan: SpanType;
 }) => {
   const {baselineSpan, regressionSpan} = props;
+
+  const dataKeys = new Set([
+    ...Object.keys(baselineSpan?.data ?? {}),
+    ...Object.keys(regressionSpan?.data ?? {}),
+  ]);
+
+  const unknownKeys = new Set([
+    ...Object.keys(baselineSpan).filter(key => {
+      return !rawSpanKeys.has(key as any);
+    }),
+    ...Object.keys(regressionSpan).filter(key => {
+      return !rawSpanKeys.has(key as any);
+    }),
+  ]);
 
   return (
     <MatchedSpanDetails>
@@ -164,6 +178,36 @@ const MatchedSpanDetailsContent = (props: {
         renderRegressiveContent={() => String(!!regressionSpan.same_process_as_parent)}
       />
       <Tags baselineSpan={baselineSpan} regressionSpan={regressionSpan} />
+      {Array.from(dataKeys).map((dataTitle: string) => (
+        <Row
+          key={dataTitle}
+          title={dataTitle}
+          renderBaselineContent={() => {
+            const data = baselineSpan?.data ?? {};
+            const value: string | undefined = data[dataTitle];
+
+            return JSON.stringify(value, null, 4) || '';
+          }}
+          renderRegressiveContent={() => {
+            const data = regressionSpan?.data ?? {};
+            const value: string | undefined = data[dataTitle];
+
+            return JSON.stringify(value, null, 4) || '';
+          }}
+        />
+      ))}
+      {Array.from(unknownKeys).map(key => (
+        <Row
+          key={key}
+          title={key}
+          renderBaselineContent={() => {
+            return JSON.stringify(baselineSpan[key], null, 4) || '';
+          }}
+          renderRegressiveContent={() => {
+            return JSON.stringify(regressionSpan[key], null, 4) || '';
+          }}
+        />
+      ))}
     </MatchedSpanDetails>
   );
 };
