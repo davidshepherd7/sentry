@@ -82,24 +82,24 @@ const MatchedSpanDetailsContent = (props: {
       <SpanBars />
       <Row
         baselineTitle={t('Baseline Span ID')}
-        regressiveTitle={t('Regressive Span ID')}
+        regressionTitle={t('Regressive Span ID')}
         renderBaselineContent={() => baselineSpan.span_id}
-        renderRegressiveContent={() => regressionSpan.span_id}
+        renderRegressionContent={() => regressionSpan.span_id}
       />
       <Row
         title={t('Parent Span ID')}
         renderBaselineContent={() => baselineSpan.parent_span_id || ''}
-        renderRegressiveContent={() => regressionSpan.parent_span_id || ''}
+        renderRegressionContent={() => regressionSpan.parent_span_id || ''}
       />
       <Row
         title={t('Trace ID')}
         renderBaselineContent={() => baselineSpan.trace_id}
-        renderRegressiveContent={() => regressionSpan.trace_id}
+        renderRegressionContent={() => regressionSpan.trace_id}
       />
       <Row
         title={t('Description')}
         renderBaselineContent={() => baselineSpan.description ?? ''}
-        renderRegressiveContent={() => regressionSpan.description ?? ''}
+        renderRegressionContent={() => regressionSpan.description ?? ''}
       />
       <Row
         title={t('Start Date')}
@@ -114,7 +114,7 @@ const MatchedSpanDetailsContent = (props: {
             ),
           })
         }
-        renderRegressiveContent={() =>
+        renderRegressionContent={() =>
           getDynamicText({
             fixed: 'Mar 16, 2020 9:10:12 AM UTC',
             value: (
@@ -139,7 +139,7 @@ const MatchedSpanDetailsContent = (props: {
             ),
           })
         }
-        renderRegressiveContent={() =>
+        renderRegressionContent={() =>
           getDynamicText({
             fixed: 'Mar 16, 2020 9:10:12 AM UTC',
             value: (
@@ -160,7 +160,7 @@ const MatchedSpanDetailsContent = (props: {
           const duration = (endTimestamp - startTimestamp) * 1000;
           return `${duration.toFixed(3)}ms`;
         }}
-        renderRegressiveContent={() => {
+        renderRegressionContent={() => {
           const startTimestamp: number = regressionSpan.start_timestamp;
           const endTimestamp: number = regressionSpan.timestamp;
 
@@ -171,12 +171,12 @@ const MatchedSpanDetailsContent = (props: {
       <Row
         title={t('Operation')}
         renderBaselineContent={() => baselineSpan.op || ''}
-        renderRegressiveContent={() => regressionSpan.op || ''}
+        renderRegressionContent={() => regressionSpan.op || ''}
       />
       <Row
         title={t('Same Process as Parent')}
         renderBaselineContent={() => String(!!baselineSpan.same_process_as_parent)}
-        renderRegressiveContent={() => String(!!regressionSpan.same_process_as_parent)}
+        renderRegressionContent={() => String(!!regressionSpan.same_process_as_parent)}
       />
       <Tags baselineSpan={baselineSpan} regressionSpan={regressionSpan} />
       {Array.from(dataKeys).map((dataTitle: string) => (
@@ -189,7 +189,7 @@ const MatchedSpanDetailsContent = (props: {
 
             return JSON.stringify(value, null, 4) || '';
           }}
-          renderRegressiveContent={() => {
+          renderRegressionContent={() => {
             const data = regressionSpan?.data ?? {};
             const value: string | undefined = data[dataTitle];
 
@@ -204,7 +204,7 @@ const MatchedSpanDetailsContent = (props: {
           renderBaselineContent={() => {
             return JSON.stringify(baselineSpan[key], null, 4) || '';
           }}
-          renderRegressiveContent={() => {
+          renderRegressionContent={() => {
             return JSON.stringify(regressionSpan[key], null, 4) || '';
           }}
         />
@@ -234,24 +234,24 @@ const SpanBars = () => {
 const Row = (props: {
   title?: string;
   baselineTitle?: string;
-  regressiveTitle?: string;
+  regressionTitle?: string;
 
   renderBaselineContent: () => React.ReactNode;
-  renderRegressiveContent: () => React.ReactNode;
+  renderRegressionContent: () => React.ReactNode;
 }) => {
-  const {title, baselineTitle, regressiveTitle} = props;
+  const {title, baselineTitle, regressionTitle} = props;
 
   const baselineContent = props.renderBaselineContent();
-  const regressiveContent = props.renderRegressiveContent();
+  const regressionContent = props.renderRegressionContent();
 
-  if (!baselineContent && !regressiveContent) {
+  if (!baselineContent && !regressionContent) {
     return null;
   }
 
   return (
     <RowSplitter>
       <RowCell title={baselineTitle ?? title ?? ''}>{baselineContent}</RowCell>
-      <RowCell title={regressiveTitle ?? title ?? ''}>{regressiveContent}</RowCell>
+      <RowCell title={regressionTitle ?? title ?? ''}>{regressionContent}</RowCell>
     </RowSplitter>
   );
 };
