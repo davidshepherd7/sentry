@@ -74,18 +74,18 @@ const MatchedSpanDetailsContent = (props: {
       </RowSplitter>
       <RowSplitter>
         <Foo>
-          <Row title="Trace ID">{baselineSpan.trace_id}</Row>
-        </Foo>
-        <Foo>
-          <Row title="Trace ID">{regressionSpan.trace_id}</Row>
-        </Foo>
-      </RowSplitter>
-      <RowSplitter>
-        <Foo>
           <Row title="Parent Span ID">{baselineSpan.parent_span_id || ''}</Row>
         </Foo>
         <Foo>
           <Row title="Parent Span ID">{regressionSpan.parent_span_id || ''}</Row>
+        </Foo>
+      </RowSplitter>
+      <RowSplitter>
+        <Foo>
+          <Row title="Trace ID">{baselineSpan.trace_id}</Row>
+        </Foo>
+        <Foo>
+          <Row title="Trace ID">{regressionSpan.trace_id}</Row>
         </Foo>
       </RowSplitter>
       <RowSplitter>
