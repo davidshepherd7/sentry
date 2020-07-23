@@ -322,6 +322,10 @@ const Tags = ({
   const baselineTags = getTags(baselineSpan);
   const regressionTags = getTags(regressionSpan);
 
+  if (!baselineTags && !regressionTags) {
+    return null;
+  }
+
   return (
     <RowSplitter>
       <RowContainer>
