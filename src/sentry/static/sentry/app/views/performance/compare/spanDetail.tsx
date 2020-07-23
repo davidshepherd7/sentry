@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
+import {t} from 'app/locale';
 import space from 'app/styles/space';
 import getDynamicText from 'app/utils/getDynamicText';
 import DateTime from 'app/components/dateTime';
+import Pill from 'app/components/pill';
+import Pills from 'app/components/pills';
 import {SpanDetailContainer} from 'app/components/events/interfaces/spans/spanDetail';
 import {SpanType} from 'app/components/events/interfaces/spans/types';
 
@@ -150,6 +153,17 @@ const MatchedSpanDetailsContent = (props: {
           return `${duration.toFixed(3)}ms`;
         }}
       />
+      <Row
+        title="Operation"
+        renderBaselineContent={() => baselineSpan.op || ''}
+        renderRegressiveContent={() => regressionSpan.op || ''}
+      />
+      <Row
+        title="Same Process as Parent"
+        renderBaselineContent={() => String(!!baselineSpan.same_process_as_parent)}
+        renderRegressiveContent={() => String(!!regressionSpan.same_process_as_parent)}
+      />
+      <Tags baselineSpan={baselineSpan} regressionSpan={regressionSpan} />
     </MatchedSpanDetails>
   );
 };
@@ -218,13 +232,68 @@ const RowCell = ({title, children}: {title: string; children: React.ReactNode}) 
   );
 };
 
-// const MatchedSpanDetails = styled('div')`
-//   display: flex;
-//   flex-direction: row;
+const getTags = (span: SpanType) => {
+  const tags: {[tag_name: string]: string} | undefined = span?.tags;
 
-//   & > * + * {
-//     border-left: 1px solid red;
-//   }
-// `;
+  if (!tags) {
+    return undefined;
+  }
+
+  const keys = Object.keys(tags);
+
+  if (keys.length <= 0) {
+    return undefined;
+  }
+
+  return tags;
+};
+
+const TagPills = ({tags}: {tags: {[tag_name: string]: string} | undefined}) => {
+  if (!tags) {
+    return null;
+  }
+
+  const keys = Object.keys(tags);
+
+  if (keys.length <= 0) {
+    return null;
+  }
+
+  return (
+    <Pills>
+      {keys.map((key, index) => (
+        <Pill key={index} name={key} value={String(tags[key]) || ''} />
+      ))}
+    </Pills>
+  );
+};
+
+const Tags = ({
+  baselineSpan,
+  regressionSpan,
+}: {
+  baselineSpan: SpanType;
+  regressionSpan: SpanType;
+}) => {
+  const baselineTags = getTags(baselineSpan);
+  const regressionTags = getTags(regressionSpan);
+
+  return (
+    <RowSplitter>
+      <RowContainer>
+        <RowTitle>{t('Tags')}</RowTitle>
+        <div>
+          <TagPills tags={baselineTags} />
+        </div>
+      </RowContainer>
+      <RowContainer>
+        <RowTitle>{t('Tags')}</RowTitle>
+        <div>
+          <TagPills tags={regressionTags} />
+        </div>
+      </RowContainer>
+    </RowSplitter>
+  );
+};
 
 export default SpanDetail;
