@@ -52,6 +52,7 @@ const StyledTitleHeader = styled('span')`
 
 const StyledPanel = styled(Panel)`
   grid-column: 1 / span 2;
+  overflow: hidden;
 `;
 
 export default TransactionComparisonContent;
