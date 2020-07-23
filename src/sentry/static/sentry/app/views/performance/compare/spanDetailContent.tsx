@@ -1,5 +1,6 @@
 import React from 'react';
 import map from 'lodash/map';
+import {t} from 'app/locale';
 
 import getDynamicText from 'app/utils/getDynamicText';
 import DateTime from 'app/components/dateTime';
@@ -28,11 +29,11 @@ class SpanDetailContent extends React.Component<Props> {
       <SpanDetails>
         <table className="table key-value">
           <tbody>
-            <Row title="Span ID">{span.span_id}</Row>
-            <Row title="Parent Span ID">{span.parent_span_id || ''}</Row>
-            <Row title="Trace ID">{span.trace_id}</Row>
-            <Row title="Description">{span?.description ?? ''}</Row>
-            <Row title="Start Date">
+            <Row title={t('Span ID')}>{span.span_id}</Row>
+            <Row title={t('Parent Span ID')}>{span.parent_span_id || ''}</Row>
+            <Row title={t('Trace ID')}>{span.trace_id}</Row>
+            <Row title={t('Description')}>{span?.description ?? ''}</Row>
+            <Row title={t('Start Date')}>
               {getDynamicText({
                 fixed: 'Mar 16, 2020 9:10:12 AM UTC',
                 value: (
@@ -43,7 +44,7 @@ class SpanDetailContent extends React.Component<Props> {
                 ),
               })}
             </Row>
-            <Row title="End Date">
+            <Row title={t('End Date')}>
               {getDynamicText({
                 fixed: 'Mar 16, 2020 9:10:13 AM UTC',
                 value: (
@@ -54,9 +55,9 @@ class SpanDetailContent extends React.Component<Props> {
                 ),
               })}
             </Row>
-            <Row title="Duration">{durationString}</Row>
-            <Row title="Operation">{span.op || ''}</Row>
-            <Row title="Same Process as Parent">
+            <Row title={t('Duration')}>{durationString}</Row>
+            <Row title={t('Operation')}>{span.op || ''}</Row>
+            <Row title={t('Same Process as Parent')}>
               {String(!!span.same_process_as_parent)}
             </Row>
             <Tags span={span} />
