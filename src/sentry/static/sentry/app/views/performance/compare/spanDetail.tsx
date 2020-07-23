@@ -60,22 +60,27 @@ const MatchedSpanDetailsContent = (props: {
 
   return (
     <MatchedSpanDetails>
-      <RowSplitter>
-        <RowCell title="Baseline Span ID">{baselineSpan.span_id}</RowCell>
-        <RowCell title="Regressive Span ID">{regressionSpan.span_id}</RowCell>
-      </RowSplitter>
-      <RowSplitter>
-        <RowCell title="Parent Span ID">{baselineSpan.parent_span_id || ''}</RowCell>
-        <RowCell title="Parent Span ID">{regressionSpan.parent_span_id || ''}</RowCell>
-      </RowSplitter>
-      <RowSplitter>
-        <RowCell title="Trace ID">{baselineSpan.trace_id}</RowCell>
-        <RowCell title="Trace ID">{regressionSpan.trace_id}</RowCell>
-      </RowSplitter>
-      <RowSplitter>
-        <RowCell title="Description">{baselineSpan.description ?? ''}</RowCell>
-        <RowCell title="Description">{regressionSpan.description ?? ''}</RowCell>
-      </RowSplitter>
+      <Row
+        baselineTitle="Baseline Span ID"
+        regressiveTitle="Regressive Span ID"
+        renderBaselineContent={() => baselineSpan.span_id}
+        renderRegressiveContent={() => regressionSpan.span_id}
+      />
+      <Row
+        title="Parent Span ID"
+        renderBaselineContent={() => baselineSpan.parent_span_id || ''}
+        renderRegressiveContent={() => regressionSpan.parent_span_id || ''}
+      />
+      <Row
+        title="Trace ID"
+        renderBaselineContent={() => baselineSpan.trace_id}
+        renderRegressiveContent={() => regressionSpan.trace_id}
+      />
+      <Row
+        title="Description"
+        renderBaselineContent={() => baselineSpan.description ?? ''}
+        renderRegressiveContent={() => regressionSpan.description ?? ''}
+      />
     </MatchedSpanDetails>
   );
 };
@@ -90,6 +95,31 @@ const RowSplitter = styled('div')`
     border-left: 1px solid ${p => p.theme.borderDark};
   }
 `;
+
+const Row = (props: {
+  title?: string;
+  baselineTitle?: string;
+  regressiveTitle?: string;
+
+  renderBaselineContent: () => React.ReactNode;
+  renderRegressiveContent: () => React.ReactNode;
+}) => {
+  const {title, baselineTitle, regressiveTitle} = props;
+
+  const baselineContent = props.renderBaselineContent();
+  const regressiveContent = props.renderRegressiveContent();
+
+  if (!baselineContent && !regressiveContent) {
+    return null;
+  }
+
+  return (
+    <RowSplitter>
+      <RowCell title={baselineTitle ?? title ?? ''}>{baselineContent}</RowCell>
+      <RowCell title={regressiveTitle ?? title ?? ''}>{regressiveContent}</RowCell>
+    </RowSplitter>
+  );
+};
 
 const RowContainer = styled('div')`
   width: 50%;
@@ -107,10 +137,6 @@ const RowTitle = styled('div')`
 `;
 
 const RowCell = ({title, children}: {title: string; children: React.ReactNode}) => {
-  if (!children) {
-    return null;
-  }
-
   return (
     <RowContainer>
       <RowTitle>{title}</RowTitle>
