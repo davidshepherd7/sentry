@@ -2,6 +2,8 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 import space from 'app/styles/space';
+import getDynamicText from 'app/utils/getDynamicText';
+import DateTime from 'app/components/dateTime';
 import {SpanDetailContainer} from 'app/components/events/interfaces/spans/spanDetail';
 import {SpanType} from 'app/components/events/interfaces/spans/types';
 
@@ -80,6 +82,56 @@ const MatchedSpanDetailsContent = (props: {
         title="Description"
         renderBaselineContent={() => baselineSpan.description ?? ''}
         renderRegressiveContent={() => regressionSpan.description ?? ''}
+      />
+      <Row
+        title="Start Date"
+        renderBaselineContent={() =>
+          getDynamicText({
+            fixed: 'Mar 16, 2020 9:10:12 AM UTC',
+            value: (
+              <React.Fragment>
+                <DateTime date={baselineSpan.start_timestamp * 1000} />
+                {` (${baselineSpan.start_timestamp})`}
+              </React.Fragment>
+            ),
+          })
+        }
+        renderRegressiveContent={() =>
+          getDynamicText({
+            fixed: 'Mar 16, 2020 9:10:12 AM UTC',
+            value: (
+              <React.Fragment>
+                <DateTime date={regressionSpan.start_timestamp * 1000} />
+                {` (${baselineSpan.start_timestamp})`}
+              </React.Fragment>
+            ),
+          })
+        }
+      />
+      <Row
+        title="End Date"
+        renderBaselineContent={() =>
+          getDynamicText({
+            fixed: 'Mar 16, 2020 9:10:12 AM UTC',
+            value: (
+              <React.Fragment>
+                <DateTime date={baselineSpan.timestamp * 1000} />
+                {` (${baselineSpan.timestamp})`}
+              </React.Fragment>
+            ),
+          })
+        }
+        renderRegressiveContent={() =>
+          getDynamicText({
+            fixed: 'Mar 16, 2020 9:10:12 AM UTC',
+            value: (
+              <React.Fragment>
+                <DateTime date={regressionSpan.timestamp * 1000} />
+                {` (${baselineSpan.timestamp})`}
+              </React.Fragment>
+            ),
+          })
+        }
       />
     </MatchedSpanDetails>
   );
