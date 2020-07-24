@@ -401,7 +401,10 @@ class SpanBar extends React.Component<Props, State> {
     dividerHandlerChildrenProps: DividerHandlerManager.DividerHandlerManagerChildrenProps
   ) {
     const {dividerPosition, addGhostDividerLineRef} = dividerHandlerChildrenProps;
-    const {spanNumber} = this.props;
+    const {spanNumber, span} = this.props;
+
+    const isMatched = span.comparisonResult === 'matched';
+    const hideSpans = this.state.showDetail && isMatched;
 
     const spanBarStyles = this.getSpanBarStyles();
 
@@ -424,7 +427,7 @@ class SpanBar extends React.Component<Props, State> {
           data-type="span-row-cell"
           showDetail={this.state.showDetail}
           style={{
-            width: `calc(${toPercent(dividerPosition)} - 0.5px)`,
+            width: hideSpans ? '100%' : `calc(${toPercent(dividerPosition)} - 0.5px)`,
           }}
           onClick={() => {
             this.toggleDisplayDetail();
@@ -432,13 +435,13 @@ class SpanBar extends React.Component<Props, State> {
         >
           {this.renderTitle()}
         </SpanRowCell>
-        {this.renderDivider(dividerHandlerChildrenProps)}
+        {hideSpans ? null : this.renderDivider(dividerHandlerChildrenProps)}
         <SpanRowCell
           data-type="span-row-cell"
           showDetail={this.state.showDetail}
           showStriping={spanNumber % 2 !== 0}
           style={{
-            width: `calc(${toPercent(1 - dividerPosition)} - 0.5px)`,
+            width: hideSpans ? '0%' : `calc(${toPercent(1 - dividerPosition)} - 0.5px)`,
           }}
           onClick={() => {
             this.toggleDisplayDetail();
