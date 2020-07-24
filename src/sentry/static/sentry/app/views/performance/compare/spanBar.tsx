@@ -375,7 +375,6 @@ class SpanBar extends React.Component<Props, State> {
         return <ComparisonReportLabelContainer>{label}</ComparisonReportLabelContainer>;
       }
       case 'baseline': {
-        // TODO: need to flesh this out.
         return (
           <ComparisonReportLabelContainer>
             removed from baseline
