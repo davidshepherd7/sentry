@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
+import theme from 'app/utils/theme';
 import {t} from 'app/locale';
 import space from 'app/styles/space';
 import getDynamicText from 'app/utils/getDynamicText';
@@ -9,17 +10,53 @@ import Pill from 'app/components/pill';
 import Pills from 'app/components/pills';
 import {SpanDetailContainer} from 'app/components/events/interfaces/spans/spanDetail';
 import {SpanType, rawSpanKeys} from 'app/components/events/interfaces/spans/types';
+import {getHumanDuration} from 'app/components/events/interfaces/spans/utils';
 
-import {DiffSpanType} from './utils';
+import {
+  DiffSpanType,
+  SpanGeneratedBoundsType,
+  generateCSSWidth,
+  SpanWidths,
+  getSpanDuration,
+} from './utils';
+import {SpanBarRectangle} from './styles';
 import SpanDetailContent from './spanDetailContent';
+
+type DurationDisplay = 'right' | 'inset';
+
+const getDurationDisplay = (width: SpanWidths | undefined): DurationDisplay => {
+  if (!width) {
+    return 'right';
+  }
+
+  switch (width.type) {
+    case 'WIDTH_PIXEL': {
+      return 'right';
+    }
+    case 'WIDTH_PERCENTAGE': {
+      const spaceNeeded = 0.3;
+
+      if (width.width < 1 - spaceNeeded) {
+        return 'right';
+      }
+
+      return 'inset';
+    }
+    default: {
+      const _exhaustiveCheck: never = width;
+      return _exhaustiveCheck;
+    }
+  }
+};
 
 type Props = {
   span: Readonly<DiffSpanType>;
+  bounds: SpanGeneratedBoundsType;
 };
 
 class SpanDetail extends React.Component<Props> {
   renderContent() {
-    const {span} = this.props;
+    const {span, bounds} = this.props;
 
     switch (span.comparisonResult) {
       case 'matched': {
@@ -27,6 +64,7 @@ class SpanDetail extends React.Component<Props> {
           <MatchedSpanDetailsContent
             baselineSpan={span.baselineSpan}
             regressionSpan={span.regressionSpan}
+            bounds={bounds}
           />
         );
       }
@@ -60,8 +98,9 @@ class SpanDetail extends React.Component<Props> {
 const MatchedSpanDetailsContent = (props: {
   baselineSpan: SpanType;
   regressionSpan: SpanType;
+  bounds: SpanGeneratedBoundsType;
 }) => {
-  const {baselineSpan, regressionSpan} = props;
+  const {baselineSpan, regressionSpan, bounds} = props;
 
   const dataKeys = new Set([
     ...Object.keys(baselineSpan?.data ?? {}),
@@ -79,7 +118,11 @@ const MatchedSpanDetailsContent = (props: {
 
   return (
     <div>
-      <SpanBars />
+      <SpanBars
+        bounds={bounds}
+        baselineSpan={baselineSpan}
+        regressionSpan={regressionSpan}
+      />
       <Row
         baselineTitle={t('Baseline Span ID')}
         regressionTitle={t('Regressive Span ID')}
@@ -222,11 +265,58 @@ const RowSplitter = styled('div')`
   }
 `;
 
-const SpanBars = () => {
+const SpanBarContainer = styled('div')`
+  position: relative;
+  height: 16px;
+
+  margin-top: ${space(1)};
+  margin-bottom: ${space(1)};
+`;
+
+const SpanBars = (props: {
+  bounds: SpanGeneratedBoundsType;
+  baselineSpan: SpanType;
+  regressionSpan: SpanType;
+}) => {
+  const {bounds, baselineSpan, regressionSpan} = props;
+
+  const baselineDurationDisplay = getDurationDisplay(bounds.baseline);
+  const regressionDurationDisplay = getDurationDisplay(bounds.regression);
+
   return (
     <RowSplitter>
-      <RowContainer>baseline</RowContainer>
-      <RowContainer>regressive</RowContainer>
+      <RowContainer>
+        <SpanBarContainer>
+          <SpanBarRectangle
+            style={{
+              backgroundColor: theme.gray700,
+              width: generateCSSWidth(bounds.baseline),
+              position: 'absolute',
+              height: '16px',
+            }}
+          >
+            <DurationPill durationDisplay={baselineDurationDisplay}>
+              {getHumanDuration(getSpanDuration(baselineSpan))}
+            </DurationPill>
+          </SpanBarRectangle>
+        </SpanBarContainer>
+      </RowContainer>
+      <RowContainer>
+        <SpanBarContainer>
+          <SpanBarRectangle
+            style={{
+              backgroundColor: theme.purple300,
+              width: generateCSSWidth(bounds.regression),
+              position: 'absolute',
+              height: '16px',
+            }}
+          >
+            <DurationPill durationDisplay={regressionDurationDisplay}>
+              {getHumanDuration(getSpanDuration(regressionSpan))}
+            </DurationPill>
+          </SpanBarRectangle>
+        </SpanBarContainer>
+      </RowContainer>
     </RowSplitter>
   );
 };
@@ -351,5 +441,34 @@ const Tags = ({
     </RowSplitter>
   );
 };
+
+const DurationPill = styled('div')<{
+  durationDisplay: DurationDisplay;
+}>`
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: ${p => p.theme.fontSizeExtraSmall};
+  color: ${p => p.theme.gray500};
+
+  ${p => {
+    switch (p.durationDisplay) {
+      case 'right':
+        return `left: calc(100% + ${space(0.75)});`;
+      default:
+        return `
+          right: ${space(0.75)};
+          color: ${theme.white};
+        `;
+    }
+  }};
+
+  @media (max-width: ${p => p.theme.breakpoints[1]}) {
+    font-size: 10px;
+  }
+`;
 
 export default SpanDetail;

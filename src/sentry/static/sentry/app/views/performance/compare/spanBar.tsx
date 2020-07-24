@@ -496,7 +496,9 @@ class SpanBar extends React.Component<Props, State> {
       return null;
     }
 
-    return <SpanDetail span={this.props.span} />;
+    const {span, generateBounds} = this.props;
+
+    return <SpanDetail span={this.props.span} bounds={generateBounds(span)} />;
   }
 
   render() {
