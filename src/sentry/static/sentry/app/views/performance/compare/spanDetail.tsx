@@ -295,7 +295,10 @@ const SpanBars = (props: {
               height: '16px',
             }}
           >
-            <DurationPill durationDisplay={baselineDurationDisplay}>
+            <DurationPill
+              durationDisplay={baselineDurationDisplay}
+              fontColors={{right: theme.gray700, inset: theme.white}}
+            >
               {getHumanDuration(getSpanDuration(baselineSpan))}
             </DurationPill>
           </SpanBarRectangle>
@@ -311,7 +314,10 @@ const SpanBars = (props: {
               height: '16px',
             }}
           >
-            <DurationPill durationDisplay={regressionDurationDisplay}>
+            <DurationPill
+              durationDisplay={regressionDurationDisplay}
+              fontColors={{right: theme.gray700, inset: theme.gray700}}
+            >
               {getHumanDuration(getSpanDuration(regressionSpan))}
             </DurationPill>
           </SpanBarRectangle>
@@ -444,6 +450,7 @@ const Tags = ({
 
 const DurationPill = styled('div')<{
   durationDisplay: DurationDisplay;
+  fontColors: {right: string; inset: string};
 }>`
   position: absolute;
   top: 50%;
@@ -452,7 +459,7 @@ const DurationPill = styled('div')<{
   transform: translateY(-50%);
   white-space: nowrap;
   font-size: ${p => p.theme.fontSizeExtraSmall};
-  color: ${p => p.theme.gray500};
+  color: ${p => p.fontColors.right};
 
   ${p => {
     switch (p.durationDisplay) {
@@ -461,7 +468,7 @@ const DurationPill = styled('div')<{
       default:
         return `
           right: ${space(0.75)};
-          color: ${theme.white};
+          color: ${p.fontColors.inset};
         `;
     }
   }};
