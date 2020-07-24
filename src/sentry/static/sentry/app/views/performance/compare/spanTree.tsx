@@ -2,7 +2,10 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 import {SentryTransactionEvent} from 'app/types';
-import {TreeDepthType} from 'app/components/events/interfaces/spans/types';
+import {
+  TreeDepthType,
+  OrphanTreeDepth,
+} from 'app/components/events/interfaces/spans/types';
 import * as DividerHandlerManager from 'app/components/events/interfaces/spans/dividerHandlerManager';
 
 import {
@@ -12,6 +15,7 @@ import {
   getSpanID,
   boundsGenerator,
   SpanGeneratedBoundsType,
+  isOrphanDiffSpan,
 } from './utils';
 import SpanGroup from './spanGroup';
 
@@ -63,11 +67,9 @@ class SpanTree extends React.Component<Props> {
       nextSpanNumber: number;
     };
 
-    // TODO: deal with orphan case
-    // const treeDepthEntry = isOrphanSpan(span)
-    //   ? ({type: 'orphan', depth: treeDepth} as OrphanTreeDepth)
-    //   : treeDepth;
-    const treeDepthEntry = treeDepth;
+    const treeDepthEntry = isOrphanDiffSpan(span)
+      ? ({type: 'orphan', depth: treeDepth} as OrphanTreeDepth)
+      : treeDepth;
 
     const treeArr = isLast
       ? continuingTreeDepths
