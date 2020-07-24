@@ -134,9 +134,6 @@ class SpanTree extends React.Component<Props> {
 
     const {rootSpans, childSpans} = comparisonReport;
 
-    console.log('comparisonReport', comparisonReport);
-    console.log('rootSpans', rootSpans);
-
     const generateBounds = boundsGenerator(rootSpans);
 
     let nextSpanNumber = 1;
@@ -165,8 +162,6 @@ class SpanTree extends React.Component<Props> {
         })}
       </React.Fragment>
     );
-
-    console.log('num of spans', nextSpanNumber - 1);
 
     return {
       spanTree,
